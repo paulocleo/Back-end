@@ -1,0 +1,56 @@
+package dao;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
+import controller.Conexao;
+import model.Voo;
+
+public class ConfiguracaoDAO extends Conexao {
+
+	public Voo listaDadosConfiguracao(){
+		Voo dadosConfiguracao;
+		List<Voo> listaDadosConfiguracao = new ArrayList<>();
+		
+		String sql = "SELECT * FROM tb_configuracao";
+		abrirConexao(sql);
+		try {
+			ResultSet rs = this.stmt.executeQuery();
+			while (rs.next()) {		
+				dadosConfiguracao = new Voo();
+				dadosConfiguracao.setDat_ida				(rs.getString("dat_inicio"));
+				dadosConfiguracao.setDat_volta				(rs.getString("dat_fim"));
+				dadosConfiguracao.setDes_cidade_destino	(rs.getString("aeroporto_destino"));
+				dadosConfiguracao.setDes_cidade_origem	(rs.getString("aeroporto_origem"));				
+								
+				listaDadosConfiguracao.add(dadosConfiguracao);
+			}
+			System.out.println("LISTOU Dados configuracao NA BASE");
+			rs.close();
+			fecharConexao();
+		} catch (SQLException e) {				
+			//org.primefaces.context.RequestContext.getCurrentInstance().execute("abrirMsgAlerta('"+e.getMessage()+"')");
+			e.printStackTrace();
+		}
+		
+		return listaDadosConfiguracao.get(0);
+	}
+	
+	public void atualizaDadosConfiguracao(Voo dados){
+				
+		String sql = "UPDATE tb_configuracao SET dat_incio = '?', dat_fim = '?', aeroporto_origem = '?', aeroporto_destino = '?'";
+		String sqlCompleto = String.format(sql, dados.getDat_ida(), dados.getDat_volta(), dados.getDes_cidade_origem(), dados.getDes_cidade_destino());
+		abrirConexao(sqlCompleto);
+		try {
+			ResultSet rs = this.stmt.executeQuery();		
+			System.out.println("ATUALIZOU Dados configuracao NA BASE");
+			rs.close();
+			fecharConexao();
+		} catch (SQLException e) {				
+			//org.primefaces.context.RequestContext.getCurrentInstance().execute("abrirMsgAlerta('"+e.getMessage()+"')");
+			e.printStackTrace();
+		}	
+	}	
+}

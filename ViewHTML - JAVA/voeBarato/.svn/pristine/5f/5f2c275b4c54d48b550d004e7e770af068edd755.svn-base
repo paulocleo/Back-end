@@ -1,0 +1,27 @@
+package view;
+
+import javax.faces.bean.ManagedBean;
+
+import dao.ConfiguracaoDAO;
+import model.Voo;
+
+@ManagedBean(name = "telaconfiguracao")
+public class TelaConfiguracaoMB {
+	
+	Voo dadosConfiguracaoVoo = new Voo();
+	
+
+	public Voo getDadosConfiguracaoVoo() {
+		return dadosConfiguracaoVoo;
+	}
+
+	public void setDadosConfiguracaoVoo(Voo dadosConfiguracaoVoo) {
+		this.dadosConfiguracaoVoo = dadosConfiguracaoVoo;
+	}
+
+	public TelaConfiguracaoMB() {
+		ConfiguracaoDAO confDAO = new ConfiguracaoDAO();
+		dadosConfiguracaoVoo = confDAO.listaDadosConfiguracao();		
+	}	
+
+}

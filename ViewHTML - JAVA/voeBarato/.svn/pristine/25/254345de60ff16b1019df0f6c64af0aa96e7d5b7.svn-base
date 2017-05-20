@@ -1,0 +1,43 @@
+package view;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.faces.bean.ManagedBean;
+
+import controller.Assert;
+import dao.VooDAO;
+import model.Voo;
+
+@ManagedBean(name = "telaprincipal")
+
+public class TelaPrincipalMB {
+	Voo dadosVoo = new Voo();
+	VooDAO voodao = new VooDAO();
+	List<Voo> voos = new ArrayList<>();
+	
+	public String obterDadosVoo(){
+		String[] arrayVoos;
+		String dados = "";
+		String dadosFinal = "";	
+		if(Assert.isEmptyList(voos)){
+			voos = voodao.listaVoos();
+		}		
+		String tagInicio = "[";
+		String tagFim = "]";
+		for (Voo voo : voos) {
+			dados = "['"+voo.getDes_cidade_origem()+"', "
+						+ "'"+voo.getDes_cidade_destino()+"',"
+						+ "'"+voo.getDat_ida()+"', "
+						+ "'"+voo.getVal_preco_com_taxa()+"', "
+						+ "'"+voo.getDes_empresa_aviacao()+"',"
+						+ "'"+voo.getTime()+"'"
+						+ "],";
+			dadosFinal = dadosFinal + dados;
+		}
+		String dadoSemVirgula = dadosFinal.substring(0, dadosFinal.length() - 1);
+		dadoSemVirgula = tagInicio + dadoSemVirgula + tagFim;
+		System.out.println(dadoSemVirgula);
+		return dadoSemVirgula;
+	}	
+}
